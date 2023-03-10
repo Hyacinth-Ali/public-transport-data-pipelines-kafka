@@ -1,6 +1,7 @@
 """Creates a turnstile data producer"""
 import logging
 from pathlib import Path
+import time
 
 from confluent_kafka import avro
 
@@ -71,5 +72,6 @@ class Turnstile(Producer):
                 key_schema=Turnstile.key_schema,
                 value_schema=Turnstile.value_schema
             )
+            time.sleep(1)
         
         
