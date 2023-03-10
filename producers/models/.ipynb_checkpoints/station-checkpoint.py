@@ -38,7 +38,7 @@ class Station(Producer):
         #
         #
         
-        topic_name = "station_arrival_events" # TODO: Come up with a better topic name
+        topic_name = "train_arrival_events" # TODO: Come up with a better topic name
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,

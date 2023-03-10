@@ -39,7 +39,7 @@ chmod g+rwx /var/lib/kafka-streams
 chgrp -R confluent /var/lib/kafka-streams
 
 # Connect to github account
-git config --global user.name "Hyacinth Ali"
+git config --global user.name "Hyacinth-Ali"
 git config --global user.email hyacinth.ali1@gmail.com
 
 (python /home/workspace/startup/stream.py &) &
