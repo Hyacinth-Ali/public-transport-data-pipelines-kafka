@@ -55,9 +55,16 @@ table = app.Table(
 #
 @app.agent(topic)
 async def station_event(stations):
-    async for station in stations.group_by(Station.station_id):
+    async for station in stations:
         
-        table[station.station_id] += station
+        if station.red:
+            line = 'red'
+        elif station.green:
+            line = 'green'
+        else:
+            line = 'blue'
+        
+        table[station.station_id] = TransformedStation(station_id=station.station_id, station_name=station.station_name, order=station.order, line=line)
         print(f"{station.station_id}: {table[station.station_id]}")
 
 

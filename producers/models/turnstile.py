@@ -72,6 +72,6 @@ class Turnstile(Producer):
                 key_schema=Turnstile.key_schema,
                 value_schema=Turnstile.value_schema
             )
-            time.sleep(1)
+            time.sleep(5)
         
         
