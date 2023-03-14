@@ -64,6 +64,8 @@ class KafkaConsumer:
         #
         #
         self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
+        
+        print("Created consumer for topic: ", self.topic_name_pattern)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
@@ -102,13 +104,18 @@ class KafkaConsumer:
         #
 #         logger.info("_consume is incomplete - skipping")
         while True:
-            message = self.poll(1.0)
+            message = self.poll(self.consume_timeout)
+            print("Message: ", message.value())
             if message.error() is not None:
                 print(f"error from consumer {message.error()}")
+                continue
+#                 return
             elif message.error() is None:
-                return 0
+                self.message_handler(message)
+#                 return 0;
             else:
-                return 1
+                self.message_handler(message)
+#                 return 1
 
 
     def close(self):

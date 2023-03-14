@@ -62,6 +62,8 @@ def run_server():
         [(r"/", MainHandler, {"weather": weather_model, "lines": lines})]
     )
     application.listen(3000)
+    
+    print("Building kafka models")
 
     # Build kafka consumers
     consumers = [
