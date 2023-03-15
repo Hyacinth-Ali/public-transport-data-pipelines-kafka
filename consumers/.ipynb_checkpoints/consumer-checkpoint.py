@@ -1,5 +1,6 @@
 """Defines core consumer functionality"""
 import logging
+import asyncio
 
 import confluent_kafka
 from confluent_kafka import Consumer
@@ -21,7 +22,7 @@ class KafkaConsumer:
         is_avro=True,
         offset_earliest=False,
         sleep_secs=1.0,
-        consume_timeout=0.1,
+        consume_timeout=1,
     ):
         """Creates a consumer object for asynchronous use"""
         self.topic_name_pattern = topic_name_pattern
@@ -103,19 +104,24 @@ class KafkaConsumer:
         #
         #
 #         logger.info("_consume is incomplete - skipping")
+        print("Consumer called, Topic: ", self.topic_name_pattern)
         while True:
-            message = self.poll(self.consume_timeout)
-            print("Message: ", message.value())
-            if message.error() is not None:
-                print(f"error from consumer {message.error()}")
-                continue
-#                 return
-            elif message.error() is None:
-                self.message_handler(message)
-#                 return 0;
+            try:
+                message = self.consumer.poll(self.consume_timeout)
+            except Exception as e:
+                print(f"Issue: error occurred consuming from topic {self.topic_name_pattern}")
+                print(e)
+            
+            if message == None:
+                print(f"No message returned from topic: {self.topic_name_pattern}")
+                return 0;
+            elif message.error():
+                print(f"error from consumer: {message.error()}")   
             else:
+                print("Message returned")
                 self.message_handler(message)
-#                 return 1
+                return 1
+            sleep(self.sleep_secs)
 
 
     def close(self):
