@@ -53,7 +53,7 @@ class KafkaConsumer:
                 {
                     'bootstrap.servers': self.broker_properties['bootstrap.servers'], 
                     'group.id': "0",
-                    'auto.offset.reset': 'earliest',
+                    'auto.offset.reset': "earliest" if offset_earliest else "latest",
                     'session.timeout.ms': 6000,
                 },
                 schema_registry=CachedSchemaRegistryClient({"url": self.broker_properties["schema.registry.url"]})
@@ -84,7 +84,6 @@ class KafkaConsumer:
         # the beginning or earliest
 #         logger.info("on_assign is incomplete - skipping")
         for partition in partitions:
-            pass
             #
             #
             # TODO

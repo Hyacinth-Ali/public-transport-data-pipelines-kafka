@@ -60,7 +60,8 @@ class Turnstile(Producer):
         # of entries that were calculated
         #
         #
-        while num_entries > 0:
+#         while num_entries > 0:
+        for _ in range(num_entries):
             self.producer.produce(
                 topic=self.topic_name,
                 key={"timestamp": self.time_millis()},
