@@ -33,14 +33,12 @@ class Producer:
 
         #
         #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
+        # Configure the broker properties with the Host URL for Kafka and Schema Registry.
         #
         #
         self.broker_properties = {
             'broker': 'PLAINTEXT://localhost:9092',
             'schema_registry': 'http://localhost:8081'
-            # TODO
         }
 
         # If the topic does not already exist, try to create it
@@ -48,7 +46,7 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        # TODO: Configure the AvroProducer
+        # Configure the AvroProducer
         self.producer = AvroProducer(
             {
                 'bootstrap.servers': self.broker_properties.get('broker'),
@@ -58,13 +56,6 @@ class Producer:
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        #
-        #
-        # TODO: Write code that creates the topic for this producer if it does not already exist on
-        # the Kafka Broker.
-        #
-        #
-#         logger.info("topic creation kafka integration incomplete - skipping")
         admin_client = AdminClient(
                 {
                     'bootstrap.servers': self.broker_properties['broker']
@@ -92,12 +83,6 @@ class Producer:
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
-        #
-        #
-        # TODO: Write cleanup code for the Producer here
-        #
-        #
-#         logger.info("producer close incomplete - skipping")
         self.producer.flush()
 
     def time_millis(self):
