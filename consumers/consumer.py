@@ -3,7 +3,7 @@ import logging
 import asyncio
 
 import confluent_kafka
-from confluent_kafka import Consumer
+from confluent_kafka import Consumer, OFFSET_BEGINNING
 from confluent_kafka.avro import AvroConsumer, CachedSchemaRegistryClient
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
@@ -50,12 +50,22 @@ class KafkaConsumer:
         if is_avro is True:
             self.broker_properties["schema.registry.url"] = "http://localhost:8081"
             self.consumer = AvroConsumer(
-                {"bootstrap.servers": self.broker_properties['bootstrap.servers'], "group.id": "0"},
+                {
+                    'bootstrap.servers': self.broker_properties['bootstrap.servers'], 
+                    'group.id': "0",
+                    'auto.offset.reset': 'earliest',
+                    'session.timeout.ms': 6000,
+                },
                 schema_registry=CachedSchemaRegistryClient({"url": self.broker_properties["schema.registry.url"]})
             )
         else:
             self.consumer = Consumer(
-                {"bootstrap.servers": self.broker_properties['bootstrap.servers'], "group.id": "0"}
+                {
+                    "bootstrap.servers": self.broker_properties['bootstrap.servers'], 
+                    "group.id": "0",
+                    'auto.offset.reset': 'earliest',
+                    'session.timeout.ms': 6000,
+                }
             )
 
         #
@@ -104,7 +114,6 @@ class KafkaConsumer:
         #
         #
 #         logger.info("_consume is incomplete - skipping")
-        print("Consumer called, Topic: ", self.topic_name_pattern)
         while True:
             try:
                 message = self.consumer.poll(self.consume_timeout)
@@ -118,7 +127,7 @@ class KafkaConsumer:
             elif message.error():
                 print(f"error from consumer: {message.error()}")   
             else:
-                print("Message returned")
+                print(f"Message returned from topic: {self.topic_name_pattern}")
                 self.message_handler(message)
                 return 1
             sleep(self.sleep_secs)
